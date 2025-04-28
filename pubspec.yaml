@@ -1,6 +1,6 @@
 name: timer_smooth_page_indicator
 description: "A Flutter package for smooth, timer-based page indicators with customizable styling and transitions."
-version: 1.0.0
+version: 1.0.1
 repository: https://github.com/Jeeva0604/timer_smooth_page_indicator
 homepage: https://github.com/Jeeva0604/timer_smooth_page_indicator
 
