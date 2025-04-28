@@ -6,10 +6,6 @@ A Flutter package for smooth, timer-based page indicators with customizable styl
 [![Pub Version](https://img.shields.io/pub/v/timer_smooth_page_indicator.svg)](https://pub.dev/packages/timer_smooth_page_indicator)
 [![GitHub Stars](https://img.shields.io/github/stars/Jeeva0604/timer_smooth_page_indicator.svg?style=social)](https://github.com/Jeeva0604/timer_smooth_page_indicator)
 
-## Example
-
-![Example](https://raw.githubusercontent.com/Jeeva0604/timer_smooth_page_indicator/main/assets/example.gif)
-
 ## Features
 
 - Auto-progressing page indicator
@@ -32,6 +28,10 @@ Then run:
 ```bash
 flutter pub get
 ```
+
+## Example
+
+![Example](https://raw.githubusercontent.com/Jeeva0604/timer_smooth_page_indicator/main/assets/example.gif)
 
 ## Usage
 
