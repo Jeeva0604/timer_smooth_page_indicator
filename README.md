@@ -3,7 +3,10 @@
 
 A Flutter package for smooth, timer-based page indicators with customizable styling and transitions.
 
-![Demo](https://raw.githubusercontent.com/Jeeva0604/timer_smooth_page_indicator/refs/heads/main/assets/example.gif)
+![Demo](https://raw.githubusercontent.com/Jeeva0604/timer_smooth_page_indicator/main/assets/example.gif)
+
+[![Pub Version](https://img.shields.io/pub/v/timer_smooth_page_indicator.svg)](https://pub.dev/packages/timer_smooth_page_indicator)
+[![GitHub Stars](https://img.shields.io/github/stars/Jeeva0604/timer_smooth_page_indicator.svg?style=social)](https://github.com/Jeeva0604/timer_smooth_page_indicator)
 
 ## Features
 
@@ -91,7 +94,13 @@ Made with ❤️ by Jeeva
 
 ⭐ Star this repo if you find it helpful!
 
+---
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
 ```
 
-Let me know if you want a version in Tamil or if you’d like badges added for pub, GitHub stars, etc.
+---
 ```
