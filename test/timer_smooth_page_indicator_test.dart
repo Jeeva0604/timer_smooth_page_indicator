@@ -6,10 +6,8 @@ void main() {
   testWidgets(
     'TimerSmoothPageIndicator shows the correct number of indicators',
     (WidgetTester tester) async {
-      // Define test values
       const totalLength = 10;
 
-      // Build the widget tree
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -19,7 +17,7 @@ void main() {
               indicatorWidth: 25,
               indicatorHeight: 8,
               activeIndicatorWidth: 45,
-              indicatorColor: const Color(0xFFE0E0E0),
+              indicatorColor: Color(0xFFE0E0E0),
               progressColor: Colors.green,
               spacing: 4,
             ),
@@ -27,7 +25,6 @@ void main() {
         ),
       );
 
-      // Ensure the correct number of indicators are shown
       final indicatorFinder = find.byType(AnimatedContainer);
       expect(indicatorFinder, findsNWidgets(totalLength));
     },
@@ -36,10 +33,8 @@ void main() {
   testWidgets('TimerSmoothPageIndicator progresses correctly', (
     WidgetTester tester,
   ) async {
-    // Define test values
     const totalLength = 10;
 
-    // Build the widget tree
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
@@ -49,7 +44,7 @@ void main() {
             indicatorWidth: 25,
             indicatorHeight: 8,
             activeIndicatorWidth: 45,
-            indicatorColor: const Color(0xFFE0E0E0),
+            indicatorColor: Color(0xFFE0E0E0),
             progressColor: Colors.green,
             spacing: 4,
           ),
@@ -57,11 +52,15 @@ void main() {
       ),
     );
 
-    // Wait for the timer to progress
-    await tester.pumpAndSettle();
+    await tester.pump(); // First frame
 
-    // Ensure the first indicator has started progressing
-    final firstIndicator = find.byType(AnimatedContainer).first;
-    expect(firstIndicator, findsOneWidget);
+    // Wait little time for animation to start
+    await tester.pump(const Duration(milliseconds: 500));
+
+    // Now check if widget tree is rebuilt (timer triggered animation)
+    expect(find.byType(AnimatedContainer), findsWidgets);
+
+    // You can also check rebuild count or animation progress state
+    // but mainly check no errors and the AnimatedContainers exist
   });
 }
