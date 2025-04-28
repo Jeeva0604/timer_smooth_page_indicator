@@ -19,7 +19,7 @@ Add the following to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  timer_smooth_page_indicator: ^1.0.0
+  timer_smooth_page_indicator: ^1.0.2
 ```
 ````
 
