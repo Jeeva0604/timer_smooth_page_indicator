@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 class TimerSmoothPageIndicator extends StatefulWidget {
@@ -12,6 +11,7 @@ class TimerSmoothPageIndicator extends StatefulWidget {
   final Color progressColor;
   final double spacing;
   final Curve curve;
+  final bool autoPlay;
 
   const TimerSmoothPageIndicator({
     super.key,
@@ -24,6 +24,7 @@ class TimerSmoothPageIndicator extends StatefulWidget {
     this.progressColor = Colors.black,
     this.spacing = 4,
     this.curve = Curves.linear,
+    this.autoPlay = true,
   });
 
   @override
@@ -32,16 +33,26 @@ class TimerSmoothPageIndicator extends StatefulWidget {
 }
 
 class _TimerSmoothPageIndicatorState extends State<TimerSmoothPageIndicator>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   int _currentIndex = 0;
   late AnimationController _progressController;
   late AnimationController _widthController;
   Timer? _autoTimer;
 
+  Duration _elapsedBeforePause = Duration.zero;
+  bool _wasPaused = false;
+  bool _wasDetached = false;
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
 
+    _initializeControllers();
+    _startAnimations();
+  }
+
+  void _initializeControllers() {
     _progressController = AnimationController(
       duration: Duration(seconds: widget.durationInSeconds),
       vsync: this,
@@ -53,17 +64,26 @@ class _TimerSmoothPageIndicatorState extends State<TimerSmoothPageIndicator>
     _widthController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
-    )..forward();
+    );
+  }
 
-    _startAutoPlay();
-    _progressController.forward();
+  void _startAnimations() {
+    _progressController.forward(from: 0.0);
+    _widthController.forward();
+
+    if (widget.autoPlay) {
+      _startAutoPlay();
+    }
   }
 
   void _startAutoPlay() {
-    _autoTimer = Timer.periodic(
-      Duration(seconds: widget.durationInSeconds),
-      (_) => _nextIndicator(),
-    );
+    _autoTimer?.cancel();
+    _autoTimer = Timer(Duration(seconds: widget.durationInSeconds), () {
+      if (mounted) {
+        _nextIndicator();
+        _startAutoPlay();
+      }
+    });
   }
 
   void _nextIndicator() {
@@ -71,11 +91,9 @@ class _TimerSmoothPageIndicatorState extends State<TimerSmoothPageIndicator>
 
     setState(() {
       _currentIndex = (_currentIndex + 1) % widget.totalLength;
-
       _progressController
         ..reset()
         ..forward();
-
       _widthController
         ..reset()
         ..forward();
@@ -83,20 +101,77 @@ class _TimerSmoothPageIndicatorState extends State<TimerSmoothPageIndicator>
   }
 
   @override
-  void dispose() {
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.paused:
+        _handleAppPaused();
+        break;
+      case AppLifecycleState.resumed:
+        _handleAppResumed();
+        break;
+      case AppLifecycleState.detached:
+        _handleAppDetached();
+        break;
+      case AppLifecycleState.hidden:
+        // TODO: Handle this case.
+        break;
+    }
+  }
+
+  void _handleAppPaused() {
+    _elapsedBeforePause =
+        _progressController.duration! * _progressController.value;
+    _progressController.stop();
     _autoTimer?.cancel();
+    _wasPaused = true;
+  }
 
-    if (_progressController.isAnimating) {
-      _progressController.stop();
+  void _handleAppResumed() {
+    if (_wasPaused || _wasDetached) {
+      final remainingDuration =
+          Duration(seconds: widget.durationInSeconds) - _elapsedBeforePause;
+
+      _progressController.forward(
+        from:
+            _elapsedBeforePause.inMilliseconds /
+            _progressController.duration!.inMilliseconds,
+      );
+
+      if (widget.autoPlay) {
+        _autoTimer?.cancel();
+        _autoTimer = Timer(remainingDuration, () {
+          if (mounted) {
+            _nextIndicator();
+            _startAutoPlay();
+          }
+        });
+      }
+
+      _wasPaused = false;
+      _wasDetached = false;
     }
+  }
 
-    if (_widthController.isAnimating) {
-      _widthController.stop();
-    }
+  void _handleAppDetached() {
+    _wasDetached = true;
+    _resetToInitialState();
+  }
 
+  void _resetToInitialState() {
+    _currentIndex = 0;
+    _elapsedBeforePause = Duration.zero;
+    _progressController.reset();
+    _widthController.reset();
+    _autoTimer?.cancel();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _autoTimer?.cancel();
     _progressController.dispose();
     _widthController.dispose();
-
     super.dispose();
   }
 
@@ -108,20 +183,22 @@ class _TimerSmoothPageIndicatorState extends State<TimerSmoothPageIndicator>
         mainAxisAlignment: MainAxisAlignment.start,
         children: List.generate(widget.totalLength, (index) {
           final isActive = index == _currentIndex;
-          final width =
-              isActive
-                  ? Tween<double>(
-                        begin: widget.indicatorWidth,
-                        end: widget.activeIndicatorWidth,
-                      )
-                      .animate(
-                        CurvedAnimation(
-                          parent: _widthController,
-                          curve: widget.curve,
-                        ),
-                      )
-                      .value
-                  : widget.indicatorWidth;
+          double width = widget.indicatorWidth;
+
+          if (isActive) {
+            width =
+                Tween<double>(
+                      begin: widget.indicatorWidth,
+                      end: widget.activeIndicatorWidth,
+                    )
+                    .animate(
+                      CurvedAnimation(
+                        parent: _widthController,
+                        curve: widget.curve,
+                      ),
+                    )
+                    .value;
+          }
 
           return AnimatedContainer(
             duration: const Duration(milliseconds: 300),

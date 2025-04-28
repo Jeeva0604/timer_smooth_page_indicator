@@ -1,5 +1,4 @@
-
-```md
+````md
 # timer_smooth_page_indicator
 
 A Flutter package for smooth, timer-based page indicators with customizable styling and transitions.
@@ -21,6 +20,7 @@ Add the following to your `pubspec.yaml`:
 dependencies:
   timer_smooth_page_indicator: ^1.0.0
 ```
+````
 
 Then run:
 
@@ -67,17 +67,17 @@ class MyApp extends StatelessWidget {
 
 ## Parameters
 
-| Parameter             | Type     | Description                                 |
-|----------------------|----------|---------------------------------------------|
-| `totalLength`        | `int`    | Number of indicators                        |
-| `durationInSeconds`  | `int`    | Time interval for each animation step       |
-| `indicatorWidth`     | `double` | Width of the inactive indicators            |
-| `activeIndicatorWidth` | `double` | Width of the active indicator             |
-| `indicatorHeight`    | `double` | Height of the indicators                    |
-| `indicatorColor`     | `Color`  | Background color of indicators              |
-| `progressColor`      | `Color`  | Color for the progressing animation         |
-| `spacing`            | `double` | Space between indicators                    |
-| `curve`              | `Curve`  | Animation curve                             |
+| Parameter              | Type     | Description                           |
+| ---------------------- | -------- | ------------------------------------- |
+| `totalLength`          | `int`    | Number of indicators                  |
+| `durationInSeconds`    | `int`    | Time interval for each animation step |
+| `indicatorWidth`       | `double` | Width of the inactive indicators      |
+| `activeIndicatorWidth` | `double` | Width of the active indicator         |
+| `indicatorHeight`      | `double` | Height of the indicators              |
+| `indicatorColor`       | `Color`  | Background color of indicators        |
+| `progressColor`        | `Color`  | Color for the progressing animation   |
+| `spacing`              | `double` | Space between indicators              |
+| `curve`                | `Curve`  | Animation curve                       |
 
 ## Author
 
@@ -90,6 +90,8 @@ Made with ❤️ by Jeeva
 ---
 
 ⭐ Star this repo if you find it helpful!
+
 ```
 
 Let me know if you want a version in Tamil or if you’d like badges added for pub, GitHub stars, etc.
+```
