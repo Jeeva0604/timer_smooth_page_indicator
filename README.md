@@ -3,8 +3,6 @@
 
 A Flutter package for smooth, timer-based page indicators with customizable styling and transitions.
 
-![Demo](https://raw.githubusercontent.com/Jeeva0604/timer_smooth_page_indicator/main/assets/example.gif)
-
 [![Pub Version](https://img.shields.io/pub/v/timer_smooth_page_indicator.svg)](https://pub.dev/packages/timer_smooth_page_indicator)
 [![GitHub Stars](https://img.shields.io/github/stars/Jeeva0604/timer_smooth_page_indicator.svg?style=social)](https://github.com/Jeeva0604/timer_smooth_page_indicator)
 
@@ -30,6 +28,11 @@ Then run:
 ```bash
 flutter pub get
 ```
+
+## Example
+
+![Example](https://raw.githubusercontent.com/Jeeva0604/timer_smooth_page_indicator/main/assets/example.gif)
+
 
 ## Usage
 
